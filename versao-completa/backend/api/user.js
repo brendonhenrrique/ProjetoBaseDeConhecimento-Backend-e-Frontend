@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt-nodejs')
 
-
 module.exports = app => {
     const { existsOrError, notExistsOrError, equalsOrError } = app.api.validation
 
@@ -21,19 +20,19 @@ module.exports = app => {
             existsOrError(user.email, 'E-mail não informado')
             existsOrError(user.password, 'Senha não informada')
             existsOrError(user.confirmPassword, 'Confirmação de Senha inválida')
-            equalsOrError(user.password, user.confirmPassword, 
+            equalsOrError(user.password, user.confirmPassword,
                 'Senhas não conferem')
-            
+
             const userFromDB = await app.db('users')
                 .where({ email: user.email }).first()
-            if(user.id) {
-            notExistsOrError(userFromDB, 'Usuário já cadastrado')
+            if(!user.id) {
+                notExistsOrError(userFromDB, 'Usuário já cadastrado')
             }
-        }catch(msg) {
+        } catch(msg) {
             return res.status(400).send(msg)
         }
 
-        user.password = encryptPassword(req.body.password)
+        user.password = encryptPassword(user.password)
         delete user.confirmPassword
 
         if(user.id) {
@@ -49,7 +48,7 @@ module.exports = app => {
                 .then(_ => res.status(204).send())
                 .catch(err => res.status(500).send(err))
         }
-    } 
+    }
 
     const get = (req, res) => {
         app.db('users')
@@ -65,7 +64,7 @@ module.exports = app => {
             .where({ id: req.params.id })
             .whereNull('deletedAt')
             .first()
-            .then(users => res.json(users))
+            .then(user => res.json(user))
             .catch(err => res.status(500).send(err))
     }
 

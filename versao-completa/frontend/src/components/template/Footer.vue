@@ -1,22 +1,17 @@
 <template>
-	<footer class="footer">
-        <span>Copyright <strong>Cod3r</strong>© 2015-2023</span>
+    <footer class="footer">
+        <span>Copyright <strong>Cod3r</strong> © 2015-2018</span>
     </footer>
 </template>
 
 <script>
 export default {
-	name: 'Footer-',
-    data: function() {
-        return {
-            contador: 0
-        }
-    }
+    name: "Footer"
 }
 </script>
 
 <style>
-    .footer{
+    .footer {
         grid-area: footer;
         background-color: #DDD;
         color: #333;

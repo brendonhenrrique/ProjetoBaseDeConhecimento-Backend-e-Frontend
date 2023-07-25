@@ -4,7 +4,7 @@ module.exports = app => {
     const { existsOrError } = app.api.validation
 
     const save = (req, res) => {
-        const article = { ...req.body}
+        const article = { ...req.body }
         if(req.params.id) article.id = req.params.id
 
         try {
@@ -13,7 +13,7 @@ module.exports = app => {
             existsOrError(article.categoryId, 'Categoria não informada')
             existsOrError(article.userId, 'Autor não informado')
             existsOrError(article.content, 'Conteúdo não informado')
-        }catch(msg) {
+        } catch(msg) {
             res.status(400).send(msg)
         }
 
@@ -36,22 +36,21 @@ module.exports = app => {
             const rowsDeleted = await app.db('articles')
                 .where({ id: req.params.id }).del()
             
-
             try {
                 existsOrError(rowsDeleted, 'Artigo não foi encontrado.')
             } catch(msg) {
-                return res.status(400).send(msg)
+                return res.status(400).send(msg)    
             }
-            
+
             res.status(204).send()
         } catch(msg) {
             res.status(500).send(msg)
         }
     }
 
-    const limit = 10 //usado para paginação
+    const limit = 10 // usado para paginação
     const get = async (req, res) => {
-        const page = req.query.page || 1 
+        const page = req.query.page || 1
 
         const result = await app.db('articles').count('id').first()
         const count = parseInt(result.count)
@@ -91,5 +90,4 @@ module.exports = app => {
     }
 
     return { save, remove, get, getById, getByCategory }
-
 }

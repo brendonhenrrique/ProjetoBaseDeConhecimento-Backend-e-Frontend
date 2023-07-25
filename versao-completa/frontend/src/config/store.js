@@ -20,7 +20,7 @@ export default new Vuex.Store({
                 state.isMenuVisible = !state.isMenuVisible
             } else {
                 state.isMenuVisible = isVisible
-            }            
+            }
         },
         setUser(state, user) {
             state.user = user

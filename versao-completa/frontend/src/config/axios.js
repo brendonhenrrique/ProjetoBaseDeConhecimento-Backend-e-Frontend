@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios'
 
 const success = res => res
 const error = err => {

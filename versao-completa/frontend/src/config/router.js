@@ -7,18 +7,19 @@ import ArticlesByCategory from '@/components/article/ArticlesByCategory'
 import ArticleById from '@/components/article/ArticleById'
 import Auth from '@/components/auth/Auth'
 
-import { userKey } from '@/global'
+import { baseApiUrl, userKey } from '@/global'
+import axios from 'axios'
 
 Vue.use(VueRouter)
 
 const routes = [{
     name: 'home',
     path: '/',
-    components: Home
+    component: Home
 }, {
     name: 'adminPages',
     path: '/admin',
-    components: AdminPages,
+    component: AdminPages,
     meta: { requiresAdmin: true }
 }, {
     name: 'articlesByCategory',
@@ -45,6 +46,19 @@ router.beforeEach((to, from, next) => {
     if(to.matched.some(record => record.meta.requiresAdmin)) {
         const user = JSON.parse(json)
         user && user.admin ? next() : next({ path: '/' })
+    } else {
+        next()
+    }
+})
+
+router.beforeEach(async (to, from, next) => {
+    const json = localStorage.getItem(userKey)
+    
+    if(to.matched.some(record => record.meta.requiresAdmin)){
+        const user = JSON.parse(json)
+        const admin = await axios.post(`${baseApiUrl}/validateAdmin`, user)
+ 
+        user && admin.data ? next() : next({ path: '/' })
     } else {
         next()
     }

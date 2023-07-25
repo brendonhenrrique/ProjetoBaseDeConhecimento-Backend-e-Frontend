@@ -8,7 +8,7 @@
 
 <script>
 export default {
-    name:'PageTitle',
+    name: 'PageTitle',
     props: ['icon', 'main', 'sub']
 }
 </script>
@@ -20,7 +20,7 @@ export default {
 
     .page-title h2 {
         color: #777;
-        margin-top: 50px;
+        margin-top: 5px;
         font-size: 1.3rem;
     }
 </style>

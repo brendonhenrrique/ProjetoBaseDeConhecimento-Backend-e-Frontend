@@ -3,10 +3,11 @@ module.exports = app => {
 
     const save = (req, res) => {
         const category = {
-                id: req.body.id,
-                name: req.body.name,
-                parenId: req.body.parentId 
+            id: req.body.id,
+            name: req.body.name,
+            parentId: req.body.parentId
         }
+        
         if(req.params.id) category.id = req.params.id
 
         try {
@@ -24,8 +25,8 @@ module.exports = app => {
         } else {
             app.db('categories')
                 .insert(category)
-                .then(_=> res.status(204).send())
-                .catch(err=> res.status(500).send(err))
+                .then(_ => res.status(204).send())
+                .catch(err => res.status(500).send(err))
         }
     }
 
@@ -35,16 +36,15 @@ module.exports = app => {
 
             const subcategory = await app.db('categories')
                 .where({ parentId: req.params.id })
-
             notExistsOrError(subcategory, 'Categoria possui subcategorias.')
 
             const articles = await app.db('articles')
                 .where({ categoryId: req.params.id })
-            notExistsOrError(articles, 'Categoria possui artigos')
+            notExistsOrError(articles, 'Categoria possui artigos.')
 
             const rowsDeleted = await app.db('categories')
                 .where({ id: req.params.id }).del()
-            existsOrError(rowsDeleted, 'Categoria não foi encontrada')
+            existsOrError(rowsDeleted, 'Categoria não foi encontrada.')
 
             res.status(204).send()
         } catch(msg) {
@@ -79,7 +79,7 @@ module.exports = app => {
         return categoriesWithPath
     }
 
-    const get =(req, res) =>{
+    const get = (req, res) => {
         app.db('categories')
             .then(categories => res.json(withPath(categories)))
             .catch(err => res.status(500).send(err))
@@ -96,19 +96,18 @@ module.exports = app => {
     const toTree = (categories, tree) => {
         if(!tree) tree = categories.filter(c => !c.parentId)
         tree = tree.map(parentNode => {
-            const isChild = node => node.parentId === parentNode.id
+            const isChild = node => node.parentId == parentNode.id
             parentNode.children = toTree(categories, categories.filter(isChild))
             return parentNode
         })
-        return tree 
+        return tree
     }
 
     const getTree = (req, res) => {
         app.db('categories')
-            .then(categories => res.json(toTree(withPath(categories))))
+            .then(categories => res.json(toTree(categories)))
             .catch(err => res.status(500).send(err))
     }
 
-
-    return{ save, remove, get, getById, getTree}
+    return { save, remove, get, getById, getTree }
 }

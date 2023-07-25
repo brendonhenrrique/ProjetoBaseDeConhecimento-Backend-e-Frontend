@@ -1,9 +1,9 @@
 <template>
 	<div id="app" :class="{'hide-menu': !isMenuVisible || !user}">
 		<Header title="Cod3r - Base de Conhecimento" 
-		:hideToggle="!user"
-		:hideUserDropdown="!user" ></Header>
-		<Menu v-if="user"></Menu>
+			:hideToggle="!user"
+			:hideUserDropdown="!user" />
+		<Menu v-if="user" />
 		<Loading v-if="validatingToken" />
 		<Content v-else />
 		<Footer />
@@ -11,14 +11,14 @@
 </template>
 
 <script>
-import axios from 'axios'
-import { baseApiUrl, userKey } from '@/global'
+import axios from "axios"
+import { baseApiUrl, userKey } from "@/global"
 import { mapState } from "vuex"
-import Header from "./components/template/Header"
-import Menu from "./components/template/Menu"
-import Content from "./components/template/Content"
-import Footer from "./components/template/Footer"
-import Loading from '@/components/template/Loading'
+import Header from "@/components/template/Header"
+import Menu from "@/components/template/Menu"
+import Content from "@/components/template/Content"
+import Footer from "@/components/template/Footer"
+import Loading from "@/components/template/Loading"
 
 export default {
 	name: "App",
@@ -39,24 +39,24 @@ export default {
 
 			if(!userData) {
 				this.validatingToken = false
-				this.$router.push({ name: 'auth'})
+				this.$router.push({ name: 'auth' })
 				return
 			}
 
 			const res = await axios.post(`${baseApiUrl}/validateToken`, userData)
 
-			if(res.data) {
+			if (res.data) {
 				this.$store.commit('setUser', userData)
 				
 				if(this.$mq === 'xs' || this.$mq === 'sm') {
-                this.$store.commit('toggleMenu', false)
-        }
+					this.$store.commit('toggleMenu', false)
+				}
 			} else {
 				localStorage.removeItem(userKey)
 				this.$router.push({ name: 'auth' })
 			}
 
-			this.validatingToken = false 
+			this.validatingToken = false
 		}
 	},
 	created() {
@@ -66,8 +66,8 @@ export default {
 </script>
 
 <style>
-	*{
-		font-family: 'Lato', sans-serif
+	* {
+		font-family: "Lato", sans-serif;
 	}
 
 	body {
@@ -82,7 +82,7 @@ export default {
 		display: grid;
 		grid-template-rows: 60px 1fr 40px;
 		grid-template-columns: 300px 1fr;
-		grid-template-areas: 
+		grid-template-areas:
 			"header header"
 			"menu content"
 			"menu footer";
@@ -94,5 +94,4 @@ export default {
 			"content content"
 			"footer footer";
 	}
-
 </style>
