@@ -1,12 +1,15 @@
-const app = require('express')()
-const consign = require('consign')
-const db = require('./config/db')
-const mongoose = require('mongoose')
+require('dotenv').config(); // Carregar variáveis de ambiente do arquivo .env
 
-require('./config/mongodb')
+const app = require('express')();
+const consign = require('consign');
+const db = require('./config/db');
+const mongoose = require('mongoose');
+const cronHandler = require('./api/cron');
 
-app.db = db
-app.mongoose = mongoose
+require('./config/mongodb');
+
+app.db = db;
+app.mongoose = mongoose;
 
 consign()
     .include('./config/passport.js')
@@ -15,8 +18,10 @@ consign()
     .then('./api')
     .then('./schedule')
     .then('./config/routes.js')
-    .into(app)
+    .into(app);
+
+cronHandler();
 
 app.listen(3000, () => {
-    console.log('Backend executando...')
-})
+    console.log('Backend executando...');
+});
