@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-export const userKey = '__knowledge_user'
-export const baseApiUrl = 'http://localhost:3000'
+export const userKey = '__knowledge_user' || null;
+export const baseApiUrl = 'https://projetobasedeconhecimento-backend-e.onrender.com';
 
 export function showError(e) {
     if(e && e.response && e.response.data) {
