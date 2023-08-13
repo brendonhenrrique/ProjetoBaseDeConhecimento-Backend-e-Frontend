@@ -78,5 +78,5 @@ module.exports = app => {
     return res.send(false);
   }
 
-  return { signin, validateToken, validateAdmin };
+  return { signin, validateAdmin };
 };
