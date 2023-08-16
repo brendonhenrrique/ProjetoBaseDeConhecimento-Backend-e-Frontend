@@ -1,12 +1,21 @@
-require('dotenv').config(); // Carregar variáveis de ambiente do arquivo .env
-
-const app = require('express')();
+require('dotenv').config();
+const express = require('express');
 const consign = require('consign');
 const db = require('./config/db');
 const mongoose = require('mongoose');
 const cronHandler = require('./api/cron');
 
 require('./config/mongodb');
+
+const app = express();
+
+// Configuração do CORS
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', 'https://base-deconhecimento-web-modern.web.app');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
 
 app.db = db;
 app.mongoose = mongoose;
