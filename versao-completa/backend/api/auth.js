@@ -58,15 +58,15 @@ module.exports = app => {
   
   const validateAdmin = async (req, res) => {
     const userData = req.body || null;
-
+  
     try {
       const token = jwt.decode(userData.token, authSecret);
       const user = await app.db('users')
-        .where({ email: token.email})
+        .where({ email: token.email })
         .whereNull('deletedAt')
         .first();
-
-      if (user && user.admin && token.admin) {
+  
+      if (user && user.admin) {
         return res.send(true);
       }
       console.log('entrou aqui 1');
@@ -74,7 +74,7 @@ module.exports = app => {
       console.error('Erro na validação do admin:', error);
       res.status(401).send(errorMessages.unauthorized);
     }
-    
+  
     return res.send(false);
   }
 
